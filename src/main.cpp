@@ -1,23 +1,35 @@
 #include <iostream>
 #include "core/Types.h"
 #include "core/SensorSample.h"
+#include "ingestion/ISensorStream.h"
+#include "ingestion/SyntheticStream.h"
 
 
 int main() {
-    // Test the basic types and structures
-    using namespace fitstream; // only applies to main function
+    using namespace fitstream;
     
-    Vector3 gravity(0.0, 0.0, -9.81);
-    std::cout << "Gravity: (" << gravity.x << ", " 
-              << gravity.y << ", " << gravity.z << ")\n";
-
-    SensorSample sample(123456789, gravity);
-    std::cout << "Sample timestamp: " << sample.timestamp << "\n";
-    std::cout << "Sample acceleration: (" 
-              << sample.acceleration.x << ", "
-              << sample.acceleration.y << ", "
-              << sample.acceleration.z << ")\n";
+    // Create a TEST synthetic stream: 500 samples, 0.25 Hz frequency, 100 Hz sample rate
+    // This should show ONE squat
+    SyntheticStream stream(500, 0.25, 100.0);
     
-    std::cout << "\nFitStream core types initialized successfully!\n";
+    std::cout << "Generating synthetic squat data:\n";
+    std::cout << "Time(s), Z-Acceleration(m/s²)\n";
+    
+    int sampleNum = 0;
+    while (stream.hasNext()) {
+        SensorSample sample = stream.getNext();
+        
+        // Print every 40th sample (shows ~10 points every 4 seconds)
+        // Negative values indicate upward movement
+        // Positive values indicate downward movement
+        if (sampleNum % 40 == 0) {
+            double timeSec = sample.timestamp / 1000.0;
+            std::cout << timeSec << "s, " 
+                      << sample.acceleration.z << "\n";
+        }
+        
+        sampleNum++;
+    }
+    
     return 0;
 }

@@ -10,12 +10,19 @@ set(CORE_SOURCES
     src/core/SensorSample.h
 )
 
+set(INGESTION_SOURCES
+    src/ingestion/ISensorStream.h
+    src/ingestion/SyntheticStream.h
+    src/ingestion/SyntheticStream.cpp
+)
+
 # Add more source files as we implement them
 
 # Build the executable with only the files we have
 add_executable(fitstream
     src/main.cpp
     ${CORE_SOURCES}
+    ${INGESTION_SOURCES}
 )
 
 target_include_directories(fitstream PRIVATE src)
