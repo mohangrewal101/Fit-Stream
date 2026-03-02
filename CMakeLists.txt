@@ -16,6 +16,13 @@ set(INGESTION_SOURCES
     src/ingestion/SyntheticStream.cpp
 )
 
+set(NORMALIZATION_SOURCES
+    src/normalization/Normalizer.h
+    src/normalization/Normalizer.cpp
+    src/normalization/NormalizationPipeline.h
+    src/normalization/NormalizationPipeline.cpp 
+)
+
 # Add more source files as we implement them
 
 # Build the executable with only the files we have
@@ -23,6 +30,7 @@ add_executable(fitstream
     src/main.cpp
     ${CORE_SOURCES}
     ${INGESTION_SOURCES}
+    ${NORMALIZATION_SOURCES}
 )
 
 target_include_directories(fitstream PRIVATE src)
